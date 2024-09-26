@@ -53,7 +53,7 @@ Once saved, this will parse and load the environment variables from the .env fil
 
 Consult [`src/config.ts`](./src/config.ts) for configuration, and [`package.json`](./package.json) for more environment variable setup.
 
-To close the server for local ports, you may press `Ctrl` + `C`.
+To close the server for local ports, you may press `Ctrl` + `C` in the command line.
 
 ## Discord Chat
 
