@@ -24,7 +24,7 @@ This builds and runs the server.
 
 After running the server, content will be served at `localhost:PORT` on your computer. The port will default to 8080, and you may override it with `process.env.PORT`.
 
-Consult `src/config.ts` for configuration, and `package.json` for environ variable setup.
+Consult [`src/config.ts`](./src/config.ts) for configuration, and [`package.json`](./package.json) for environment variable setup.
 
 ## Discord Chat
 
