@@ -16,9 +16,6 @@
     along with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
-/**
- * UNDOCUMENTED FILE
- **/
 import Vector, { VectorAbstract } from "./Vector";
 
 export default class Velocity extends Vector {
@@ -26,11 +23,13 @@ export default class Velocity extends Vector {
     public position = new Vector();
     private firstTime = true;
 
+    /** Calcuates the velocity based on change in position */
     public updateVelocity() {
         this.x = this.position.x - this.previousPosition.x;
         this.y = this.position.y - this.previousPosition.y;
     }
 
+    /** Updates the current velocity and position */
     public setPosition(newPosition: VectorAbstract) {
         this.previousPosition.set(this.position);
         this.position.set(newPosition);

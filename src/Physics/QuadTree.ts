@@ -16,10 +16,6 @@
     along with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
-/**
- * UNDOCUMENTED FILE
- **/
-
 import ObjectEntity from "../Entity/Object";
 import CollisionManager from "./CollisionManager";
 
@@ -53,8 +49,11 @@ class QuadTreeNode<T> {
         this.level = level;
     }
 
+    /** Inserting an object into a given range */
     protected _insert(object: Range<T>) {
         // {entity, x, y, radiW, radiH}
+        
+        // Check if current node is subdivided, then insert object into overlapping quadrants
         if (this.topLeft) {
             const top = object.y - object.radiH < this.y,
                 bottom = object.y + object.radiH > this.y,
@@ -74,6 +73,7 @@ class QuadTreeNode<T> {
 
         this.objects[this.objects.length] = object;
 
+        // Subdivide the object into 4 quadrants
         if (this.objects.length === 5 && this.level <= 9) {
             const halfW = this.radiW / 2,
                 halfH = this.radiH / 2,
@@ -147,7 +147,9 @@ class QuadTreeNode<T> {
         }
     }
 
+    /** Queries and retrieves all objects within a certain range */
     protected _retrieve(x: number, y: number, radiW: number, radiH: number): Range<T>[] {
+        // Check for subdivision, then retrieve objects from overlapping nodes
         if (this.topLeft) {
             let out: Range<T>[] = [];
             const top = y - radiH < this.y,
@@ -172,6 +174,7 @@ export default class DiepQuadTree extends QuadTreeNode<ObjectEntity> implements 
     public constructor(radiW: number, radiH: number) {
         super(0, 0, radiW, radiH, 0);
     }
+    /** Insert object based on entity dimensions */
     public insertEntity(entity: ObjectEntity) {
         this._insert({
             content: entity,
@@ -181,7 +184,7 @@ export default class DiepQuadTree extends QuadTreeNode<ObjectEntity> implements 
             radiH: entity.physicsData.values.sides === 2 ? entity.physicsData.values.width / 2 : entity.physicsData.values.size,
         });
     }
-
+    /** Retrieve list of entities that overlap parameter dimensions */
     public retrieve(x: number, y: number, radiW: number, radiH: number): ObjectEntity[] {
         const ranges = this._retrieve(x, y, radiW, radiH);
 
@@ -193,14 +196,14 @@ export default class DiepQuadTree extends QuadTreeNode<ObjectEntity> implements 
 
         return entities;
     }
-
+    /** Find entities in proximity to an ObjectEntity */
     public retrieveEntitiesByEntity(entity: ObjectEntity): ObjectEntity[] {
         return this.retrieve(entity.positionData.values.x,
             entity.positionData.values.y,
             entity.physicsData.values.sides === 2 ? entity.physicsData.values.size / 2 : entity.physicsData.values.size,
             entity.physicsData.values.sides === 2 ? entity.physicsData.values.width / 2 : entity.physicsData.values.size);
     }
-
+    /** Clear QuadTree data */
     public reset(bottomY: number, rightX: number) {
         this.bottomRight = this.bottomLeft = this.topLeft = this.topRight = null;
         this.radiW = rightX;
